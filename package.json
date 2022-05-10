@@ -1,0 +1,18 @@
+{
+  "name": "reedsdettest",
+  "version": "1.0.0",
+  "description": "Interview assigment for reed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rinshad Hameed",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^9.6.1",
+    "cypress-cucumber-preprocessor": "^4.3.1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "step_definitions": "cypress/integration/reedtests/step_definitions/**/"
+ }
+}

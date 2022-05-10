@@ -1,0 +1,7 @@
+{
+  "testFiles": "**/*.feature",
+  "baseUrl": "https://www.reed.co.uk/",
+  "env": {
+    "environment": "production"
+  }
+}
