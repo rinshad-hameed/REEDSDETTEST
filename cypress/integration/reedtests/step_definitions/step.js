@@ -3,8 +3,9 @@ import { Given, When, Then } from "cypress-cucumber-preprocessor/steps";
 
 //Navigate to website
 Given("Go to reed website", () => {
+  //URL is set as dynamic to fetch from cypress.json based on the environments.
   cy.visit(Cypress.config().baseUrl)
-  // cy.visit(Cypress.config("baseUrl"));
+
   cy.wait(2000);
   cy.get("#onetrust-accept-btn-handler").click();
 }),
@@ -13,8 +14,7 @@ Given("Go to reed website", () => {
 When("I search with below criteria", (datatable) => {
 
     datatable.hashes().forEach((row) => {
-      //Bonus1 did parameterized :and Performs a search for 'engineer' jobs in 'South West London'
-
+      //Dataset passed from feature file to run on multiple set of data
       cy.get("#main-keywords").type(row.JOBTITLE);
       cy.get("#main-location").type(row.LOCATION);
 
@@ -39,7 +39,7 @@ When("I search with below criteria", (datatable) => {
      })
     });
 
-
+    //Validate the results from relevant locations.
     And('Validate atleast {int} results are from location {string}',(locationCount,location)=>{
       cy.get('.job-metadata__item--location').find('span:contains('+location+')').should('have.length.at.least',locationCount)
     });
@@ -50,11 +50,10 @@ When("I search with below criteria", (datatable) => {
       cy.get('#content > div.row.search-results > aside > div.refine-container > div.form-container > div:nth-child(8) > ul > li')
       .children()
       .contains(Specialisms)
-      .click()
-      //To Ensure next to the 'Financial Services' filter ,there is a number which is the job count for that filter. This number needs to be equal to the total jobs count after the filter is applied.
-
+      .click()  
     })
 
+      //To Ensure next to the 'Financial Services' filter ,there is a number which is the job count for that filter. This number needs to be equal to the total jobs count after the filter is applied.
     Then('Validate the job count equal to the total jobs',()=>{
        cy.get(".selected > .count")
        .invoke("val")
