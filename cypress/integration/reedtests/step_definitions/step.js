@@ -2,7 +2,7 @@ import { Given, When, Then } from "cypress-cucumber-preprocessor/steps";
 
 
 //Navigate to website
-Given("I go to reed website", () => {
+Given("Go to reed website", () => {
   cy.visit(Cypress.config().baseUrl)
   // cy.visit(Cypress.config("baseUrl"));
   cy.wait(2000);

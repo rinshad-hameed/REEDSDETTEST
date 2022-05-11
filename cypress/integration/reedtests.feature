@@ -3,7 +3,7 @@
 Feature: Reed search funtionality
 
     Scenario: Search for engineers
-    Given I go to reed website 
+    Given Go to reed website 
     When I search with below criteria
       | JOBTITLE | LOCATION |
       | Engineer | South West London |        
