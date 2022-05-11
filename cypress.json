@@ -1,6 +1,10 @@
 {
-    "testFiles": "**/*.feature",
+"baseUrl": "https://www.reed.co.uk/",
 
-        "baseUrl" : "https://www.reed.co.uk/"
-
+"env": {
+"qa": "https://qa.reed.co.uk/",
+"dev": "https://dev.reed.co.uk/",
+"prod": "https://www.reed.co.uk/"
+},
+"testFiles": "**/*.feature"
 }

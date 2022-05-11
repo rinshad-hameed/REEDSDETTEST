@@ -13,25 +13,14 @@
 // the project's config changing)
 
 const cucumber = require('cypress-cucumber-preprocessor').default;
-// const fs = require("fs-extra");
-// const path = require("path");
 
-// const fetchConfigurationByFile = file => {
-//   const pathOfConfigurationFile = `config/${file}.json`;
-
-//   return (
-//     file && fs.readJson(path.join(__dirname, "../", pathOfConfigurationFile))
-//   );
-// };
 
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
+
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+
   on('file:preprocessor',cucumber());
-  // const environment = config.env.configFile || "prod";
-  // const configurationForEnvironment = fetchConfigurationByFile(environment);
+
 };

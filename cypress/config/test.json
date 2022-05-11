@@ -1,7 +1,0 @@
-{
-  "testFiles": "**/*.feature",
-  "baseUrl": "https://qa.reed.co.uk/",
-  "env": {
-    "environment": "test"
-  }
-}

@@ -1,57 +1,70 @@
+import { Given, When, Then } from "cypress-cucumber-preprocessor/steps";
 
-import { Given, When, Then} from 'cypress-cucumber-preprocessor/steps';
 
-Given('I go to reed website', ()=>{
-
-    cy.visit(Cypress.config('baseUrl'));
-
-    cy.wait(5000);
-    cy.get('#onetrust-accept-btn-handler').click()  
-
+//Navigate to website
+Given("I go to reed website", () => {
+  cy.visit(Cypress.config().baseUrl)
+  // cy.visit(Cypress.config("baseUrl"));
+  cy.wait(2000);
+  cy.get("#onetrust-accept-btn-handler").click();
 }),
 
-When('search with below criteria', datatable => {
-    datatable.hashes().forEach(row => {
-    //Bonus1 did parameterized :and Performs a search for 'engineer' jobs in 'South West London'
+//Search with title and location
+When("I search with below criteria", (datatable) => {
+
+    datatable.hashes().forEach((row) => {
+      //Bonus1 did parameterized :and Performs a search for 'engineer' jobs in 'South West London'
+
+      cy.get("#main-keywords").type(row.JOBTITLE);
+      cy.get("#main-location").type(row.LOCATION);
+
+      cy.get(".form-submit > .desktop-content").click();
+
+      cy.get(".search-results").should('be.visible');
+
+    })});
+
+    //Validating the random 5 results
+    Then('validate {int} randomly selected results for the text {string}',(countofEnries,jobTitle) => {
+        cy.get('header > h3.job-result-heading__title > a').its('length').then(n=> {
+        cy.log("Item count : "+n)
+        var randArray = Array.from({ length: countofEnries }, () =>
+        Math.floor(Math.random() * n)    
+        );
+        for (let i = 0; i < randArray.length; i++) {
+        cy.get("header > h3.job-result-heading__title > a")
+          .eq(randArray[i])
+          .should("contain", jobTitle, { matchCase: false });
+      }  
+     })
+    });
 
 
-    cy.get('#main-keywords').type(row.JOBTITLE)
-    cy.get('#main-location').type(row.LOCATION)
-    
+    And('Validate atleast {int} results are from location {string}',(locationCount,location)=>{
+      cy.get('.job-metadata__item--location').find('span:contains('+location+')').should('have.length.at.least',locationCount)
+    });
 
-    cy.get('.form-submit > .desktop-content').click()
 
-    cy.get('.search-results')
-    
-     let resultList = 0;   
-        //5 randomly selected results contain the 'engineer' in the search result page headings
-    cy.get('header > h3.job-result-heading__title > a').each(($el, index) => {
-        expect($el).to.contain('Engineer')
-         
-        cy.log('index is : '+resultList)
-    
+    //Filter with financial services and validate the count
+    When('Filter {string} Specialisms',(Specialisms)=>{     
+      cy.get('#content > div.row.search-results > aside > div.refine-container > div.form-container > div:nth-child(8) > ul > li')
+      .children()
+      .contains(Specialisms)
+      .click()
+      //To Ensure next to the 'Financial Services' filter ,there is a number which is the job count for that filter. This number needs to be equal to the total jobs count after the filter is applied.
+
     })
 
+    Then('Validate the job count equal to the total jobs',()=>{
+       cy.get(".selected > .count")
+       .invoke("val")
+       .then((ftsElement) => {
+        cy.get(".col-sm-11 > .count").should("have.value", ftsElement);
+    })
+  });
 
 
-    var randArray =  Array.from({length: 25}, () => Math.floor(Math.random() * 25));   
 
-    cy.log("The array is : "+randArray + " ELe count is : "+resultList)    
-
-    for (let i = 0; i < 4; i++) {
-        cy.get('header > h3.job-result-heading__title > a').eq(1).should('contain',"Engineer", { matchCase: false});
-      }
 
   
-        //Filter 'Financial Services' jobs from the jobs' specialisms.
-    cy.get('.facets > :nth-child(11)').contains('Financial Services').click()
 
-    //To Ensure next to the 'Financial Services' filter ,there is a number which is the job count for that filter. This number needs to be equal to the total jobs count after the filter is applied.
-    cy.get('.selected > .count').invoke('val').then(ftsElement => {
-    cy.get('.col-sm-11 > .count').should('have.value', ftsElement)
-    })
-
-
-
-}
-)});
